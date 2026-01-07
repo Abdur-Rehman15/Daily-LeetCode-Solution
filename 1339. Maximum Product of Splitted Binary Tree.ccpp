@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int total = 0;
+    long long maxProd = 0;
+    const int MOD = 1e9+7;
+
+    void totalSum(TreeNode* root) {
+        if (root == nullptr) return;
+        total += root->val;
+        totalSum(root->left);
+        totalSum(root->right);
+    }
+
+    long long maxi(TreeNode* root) {
+        if (root == nullptr) return 0;
+
+        long long left = maxi(root->left);
+        long long right = maxi(root->right);
+
+        long long currSum = root->val + left + right;
+        long long remSum = total - currSum;
+        maxProd = max(maxProd, remSum * currSum);
+
+        return currSum;
+    }
+
+    int maxProduct(TreeNode* root) {
+        totalSum(root);
+        maxi(root);
+
+        return maxProd % MOD;
+    }
+};
